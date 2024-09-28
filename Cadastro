@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Capriola&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: 'Capriola', sans-serif;
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ccc;
+        }
+        a {
+            color: white;
+        }
+        img {
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="https://i.ibb.co/nf6JQNz/IMG-5069.jpg" alt="Logo">
+
+    <h2>Cadastro</h2>
+    <form id="signup-form">
+        <input type="text" id="signup-name" placeholder="E-mail ou Nome" required>
+        <input type="password" id="signup-password" placeholder="Palavra-passe" required>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <p>Já tem uma conta? <a href="https://sites.google.com/view/pvlogin/in%C3%ADcio">Faça login aqui</a></p>
+
+    <script>
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function getUsers() {
+            const users = localStorage.getItem('users');
+            return users ? JSON.parse(users) : [];
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const password = document.getElementById('signup-password').value;
+            const hashedPassword = CryptoJS.SHA256(password).toString();
+
+            const users = getUsers();
+
+            // Verifica se o usuário já está cadastrado
+            if (users.find(user => user.name === name)) {
+                alert('Usuário já cadastrado!');
+                return;
+            }
+
+            users.push({ name, password: hashedPassword });
+            saveUsers(users);
+            alert('Cadastro realizado com sucesso! Redirecionando para o login...');
+            window.location.href = "https://sites.google.com/view/pvlogin/in%C3%ADcio"; // Redireciona para o login
+        });
+    </script>
+</body>
+</html>
